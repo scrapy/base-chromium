@@ -50,7 +50,7 @@
 #include "base/atomicops.h"
 #include "base/debug/leak_annotations.h"
 #include "base/lazy_instance_helpers.h"
-#include "base/logging.h"
+// #include "base/logging.h"
 #include "base/threading/thread_restrictions.h"
 
 // LazyInstance uses its own struct initializer-list style static
@@ -62,7 +62,7 @@ namespace base {
 template <typename Type>
 struct LazyInstanceTraitsBase {
   static Type* New(void* instance) {
-    DCHECK_EQ(reinterpret_cast<uintptr_t>(instance) & (alignof(Type) - 1), 0u);
+    // DCHECK_EQ(reinterpret_cast<uintptr_t>(instance) & (alignof(Type) - 1), 0u);
     // Use placement new to initialize our instance in our preallocated space.
     // The parenthesis is very important here to force POD type initialization.
     return new (instance) Type();
@@ -84,9 +84,9 @@ namespace internal {
 template <typename Type>
 struct DestructorAtExitLazyInstanceTraits {
   static const bool kRegisterOnExit = true;
-#if DCHECK_IS_ON()
-  static const bool kAllowedToAccessOnNonjoinableThread = false;
-#endif
+// #if DCHECK_IS_ON()
+//   static const bool kAllowedToAccessOnNonjoinableThread = false;
+// #endif
 
   static Type* New(void* instance) {
     return LazyInstanceTraitsBase<Type>::New(instance);
@@ -108,9 +108,9 @@ struct DestructorAtExitLazyInstanceTraits {
 template <typename Type>
 struct LeakyLazyInstanceTraits {
   static const bool kRegisterOnExit = false;
-#if DCHECK_IS_ON()
-  static const bool kAllowedToAccessOnNonjoinableThread = true;
-#endif
+// #if DCHECK_IS_ON()
+//   static const bool kAllowedToAccessOnNonjoinableThread = true;
+// #endif
 
   static Type* New(void* instance) {
     ANNOTATE_SCOPED_MEMORY_LEAK;
@@ -149,10 +149,10 @@ class LazyInstance {
   }
 
   Type* Pointer() {
-#if DCHECK_IS_ON()
-    if (!Traits::kAllowedToAccessOnNonjoinableThread)
-      ThreadRestrictions::AssertSingletonAllowed();
-#endif
+// #if DCHECK_IS_ON()
+//     if (!Traits::kAllowedToAccessOnNonjoinableThread)
+//       ThreadRestrictions::AssertSingletonAllowed();
+// #endif
 
     return subtle::GetOrCreateLazyPointer(
         &private_instance_, &Traits::New, private_buf_,
@@ -172,10 +172,10 @@ class LazyInstance {
   // MSVC gives a warning that the alignment expands the size of the
   // LazyInstance struct to make the size a multiple of the alignment. This
   // is expected in this case.
-#if defined(OS_WIN)
-#pragma warning(push)
-#pragma warning(disable: 4324)
-#endif
+// #if defined(OS_WIN)
+// #pragma warning(push)
+// #pragma warning(disable: 4324)
+// #endif
 
   // Effectively private: member data is only public to allow the linker to
   // statically initialize it and to maintain a POD class. DO NOT USE FROM
@@ -185,9 +185,9 @@ class LazyInstance {
   // Preallocated space for the Type instance.
   alignas(Type) char private_buf_[sizeof(Type)];
 
-#if defined(OS_WIN)
-#pragma warning(pop)
-#endif
+// #if defined(OS_WIN)
+// #pragma warning(pop)
+// #endif
 
  private:
   Type* instance() {
