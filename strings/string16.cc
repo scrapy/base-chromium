@@ -14,6 +14,7 @@
 #elif defined(WCHAR_T_IS_UTF32)
 
 #include <ostream>
+#include <string.h>
 
 #include "base/strings/utf_string_conversions.h"
 
