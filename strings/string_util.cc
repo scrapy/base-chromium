@@ -586,7 +586,7 @@ bool StartsWithT(BasicStringPiece<Str> str,
           CaseInsensitiveCompareASCII<typename Str::value_type>());
 
     default:
-      NOTREACHED();
+      // NOTREACHED();
       return false;
   }
 }
@@ -624,7 +624,7 @@ bool EndsWithT(BasicStringPiece<Str> str,
           CaseInsensitiveCompareASCII<typename Str::value_type>());
 
     default:
-      NOTREACHED();
+      // NOTREACHED();
       return false;
   }
 }
@@ -1037,7 +1037,7 @@ OutStringType DoReplaceStringPlaceholders(
           --i;
         } else {
           if (*i < '1' || *i > '9') {
-            DLOG(ERROR) << "Invalid placeholder: $" << *i;
+            // DLOG(ERROR) << "Invalid placeholder: $" << *i;
             continue;
           }
           uintptr_t index = *i - '1';

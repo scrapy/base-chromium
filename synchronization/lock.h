@@ -43,17 +43,17 @@ class BASE_EXPORT Lock {
   // it).
   void Acquire() {
     lock_.Lock();
-    CheckUnheldAndMark();
+    // CheckUnheldAndMark();
   }
   void Release() {
-    CheckHeldAndUnmark();
+    // CheckHeldAndUnmark();
     lock_.Unlock();
   }
 
   bool Try() {
     bool rv = lock_.Try();
     if (rv) {
-      CheckUnheldAndMark();
+      // CheckUnheldAndMark();
     }
     return rv;
   }

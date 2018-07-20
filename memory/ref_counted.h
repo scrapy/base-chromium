@@ -318,7 +318,7 @@ class RefCounted : public subtle::RefCountedBase {
       // Prune the code paths which the static analyzer may take to simulate
       // object destruction. Use-after-free errors aren't possible given the
       // lifetime guarantees of the refcounting system.
-      ANALYZER_SKIP_THIS_PATH();
+      // ANALYZER_SKIP_THIS_PATH();
 
       Traits::Destruct(static_cast<const T*>(this));
     }
@@ -383,7 +383,7 @@ class RefCountedThreadSafe : public subtle::RefCountedThreadSafeBase {
 
   void Release() const {
     if (subtle::RefCountedThreadSafeBase::Release()) {
-      ANALYZER_SKIP_THIS_PATH();
+      // ANALYZER_SKIP_THIS_PATH();
       Traits::Destruct(static_cast<const T*>(this));
     }
   }
