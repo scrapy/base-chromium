@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <ostream>
+#include <string.h>
 
 // #include "base/logging.h"
 
