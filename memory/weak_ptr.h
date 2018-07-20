@@ -244,11 +244,11 @@ class WeakPtr : public internal::WeakPtrBase {
   }
 
   T& operator*() const {
-    DCHECK(get() != nullptr);
+    // DCHECK(get() != nullptr);
     return *get();
   }
   T* operator->() const {
-    DCHECK(get() != nullptr);
+    // DCHECK(get() != nullptr);
     return get();
   }
 
@@ -313,13 +313,13 @@ class WeakPtrFactory : public internal::WeakPtrFactoryBase {
 
   // Call this method to invalidate all existing weak pointers.
   void InvalidateWeakPtrs() {
-    DCHECK(ptr_);
+    // DCHECK(ptr_);
     weak_reference_owner_.Invalidate();
   }
 
   // Call this method to determine if any weak pointers exist.
   bool HasWeakPtrs() const {
-    DCHECK(ptr_);
+    // DCHECK(ptr_);
     return weak_reference_owner_.HasRefs();
   }
 
