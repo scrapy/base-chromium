@@ -10,7 +10,7 @@
 #include "base/base_export.h"
 #include "base/compiler_specific.h"
 #include "base/macros.h"
-#include "base/synchronization/lock.h"
+// #include "base/synchronization/lock.h"
 
 namespace base {
 
@@ -37,7 +37,7 @@ class BASE_EXPORT SequenceCheckerImpl {
   class Core;
 
   // Guards all variables below.
-  mutable Lock lock_;
+  // mutable Lock lock_;
   mutable std::unique_ptr<Core> core_;
 
   DISALLOW_COPY_AND_ASSIGN(SequenceCheckerImpl);

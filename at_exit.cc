@@ -59,7 +59,7 @@ void AtExitManager::RegisterTask(base::Closure task) {
     return;
   }
 
-  AutoLock lock(g_top_manager->lock_);
+  // AutoLock lock(g_top_manager->lock_);
   // DCHECK(!g_top_manager->processing_callbacks_);
   g_top_manager->stack_.push(std::move(task));
 }
@@ -76,7 +76,7 @@ void AtExitManager::ProcessCallbacksNow() {
   // handle it gracefully in release builds so we don't deadlock.
   base::stack<base::Closure> tasks;
   {
-    AutoLock lock(g_top_manager->lock_);
+    // AutoLock lock(g_top_manager->lock_);
     tasks.swap(g_top_manager->stack_);
     g_top_manager->processing_callbacks_ = true;
   }
@@ -96,7 +96,7 @@ void AtExitManager::ProcessCallbacksNow() {
 }
 
 void AtExitManager::DisableAllAtExitManagers() {
-  AutoLock lock(g_top_manager->lock_);
+  // AutoLock lock(g_top_manager->lock_);
   g_disable_managers = true;
 }
 
