@@ -321,12 +321,12 @@ std::string WideToUTF8(WStringPiece wide) {
 #endif  // defined(WCHAR_T_IS_UTF32)
 
 string16 ASCIIToUTF16(StringPiece ascii) {
-  DCHECK(IsStringASCII(ascii)) << ascii;
+  // DCHECK(IsStringASCII(ascii)) << ascii;
   return string16(ascii.begin(), ascii.end());
 }
 
 std::string UTF16ToASCII(StringPiece16 utf16) {
-  DCHECK(IsStringASCII(utf16)) << UTF16ToUTF8(utf16);
+  // DCHECK(IsStringASCII(utf16)) << UTF16ToUTF8(utf16);
   return std::string(utf16.begin(), utf16.end());
 }
 

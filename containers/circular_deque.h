@@ -12,7 +12,7 @@
 #include <utility>
 
 #include "base/containers/vector_buffer.h"
-#include "base/logging.h"
+// #include "base/logging.h"
 #include "base/macros.h"
 #include "base/template_util.h"
 
@@ -137,9 +137,9 @@ class circular_deque_const_iterator {
   using iterator_category = std::random_access_iterator_tag;
 
   circular_deque_const_iterator() : parent_deque_(nullptr), index_(0) {
-#if DCHECK_IS_ON()
-    created_generation_ = 0;
-#endif  // DCHECK_IS_ON()
+// #if DCHECK_IS_ON()
+//     created_generation_ = 0;
+// #endif  // DCHECK_IS_ON()
   }
 
   // Dereferencing.
@@ -239,9 +239,9 @@ class circular_deque_const_iterator {
 
   circular_deque_const_iterator(const circular_deque<T>* parent, size_t index)
       : parent_deque_(parent), index_(index) {
-#if DCHECK_IS_ON()
-    created_generation_ = parent->generation_;
-#endif  // DCHECK_IS_ON()
+// #if DCHECK_IS_ON()
+//     created_generation_ = parent->generation_;
+// #endif  // DCHECK_IS_ON()
   }
 
   // Returns the offset from the beginning index of the buffer to the current
@@ -270,12 +270,12 @@ class circular_deque_const_iterator {
   }
   void Add(difference_type delta) {
     CheckUnstableUsage();
-#if DCHECK_IS_ON()
-    if (delta <= 0)
-      parent_deque_->CheckValidIndexOrEnd(index_);
-    else
-      parent_deque_->CheckValidIndex(index_);
-#endif
+// #if DCHECK_IS_ON()
+//     if (delta <= 0)
+//       parent_deque_->CheckValidIndexOrEnd(index_);
+//     else
+//       parent_deque_->CheckValidIndex(index_);
+// #endif
     // It should be valid to add 0 to any iterator, even if the container is
     // empty and the iterator points to end(). The modulo below will divide
     // by 0 if the buffer capacity is empty, so it's important to check for
@@ -284,43 +284,43 @@ class circular_deque_const_iterator {
       return;
 
     difference_type new_offset = OffsetFromBegin() + delta;
-    DCHECK(new_offset >= 0 &&
-           new_offset <= static_cast<difference_type>(parent_deque_->size()));
+    // DCHECK(new_offset >= 0 &&
+    //        new_offset <= static_cast<difference_type>(parent_deque_->size()));
     index_ = (new_offset + parent_deque_->begin_) %
              parent_deque_->buffer_.capacity();
   }
 
-#if DCHECK_IS_ON()
-  void CheckUnstableUsage() const {
-    DCHECK(parent_deque_);
-    // Since circular_deque doesn't guarantee stability, any attempt to
-    // dereference this iterator after a mutation (i.e. the generation doesn't
-    // match the original) in the container is illegal.
-    DCHECK_EQ(created_generation_, parent_deque_->generation_)
-        << "circular_deque iterator dereferenced after mutation.";
-  }
-  void CheckComparable(const circular_deque_const_iterator& other) const {
-    DCHECK_EQ(parent_deque_, other.parent_deque_);
-    // Since circular_deque doesn't guarantee stability, two iterators that
-    // are compared must have been generated without mutating the container.
-    // If this fires, the container was mutated between generating the two
-    // iterators being compared.
-    DCHECK_EQ(created_generation_, other.created_generation_);
-  }
-#else
+// #if DCHECK_IS_ON()
+//   void CheckUnstableUsage() const {
+//     DCHECK(parent_deque_);
+//     // Since circular_deque doesn't guarantee stability, any attempt to
+//     // dereference this iterator after a mutation (i.e. the generation doesn't
+//     // match the original) in the container is illegal.
+//     DCHECK_EQ(created_generation_, parent_deque_->generation_)
+//         << "circular_deque iterator dereferenced after mutation.";
+//   }
+//   void CheckComparable(const circular_deque_const_iterator& other) const {
+//     DCHECK_EQ(parent_deque_, other.parent_deque_);
+//     // Since circular_deque doesn't guarantee stability, two iterators that
+//     // are compared must have been generated without mutating the container.
+//     // If this fires, the container was mutated between generating the two
+//     // iterators being compared.
+//     DCHECK_EQ(created_generation_, other.created_generation_);
+//   }
+// #else
   inline void CheckUnstableUsage() const {}
   inline void CheckComparable(const circular_deque_const_iterator&) const {}
-#endif  // DCHECK_IS_ON()
+// #endif  // DCHECK_IS_ON()
 
   const circular_deque<T>* parent_deque_;
   size_t index_;
 
-#if DCHECK_IS_ON()
-  // The generation of the parent deque when this iterator was created. The
-  // container will update the generation for every modification so we can
-  // test if the container was modified by comparing them.
-  uint64_t created_generation_;
-#endif  // DCHECK_IS_ON()
+// #if DCHECK_IS_ON()
+//   // The generation of the parent deque when this iterator was created. The
+//   // container will update the generation for every modification so we can
+//   // test if the container was modified by comparing them.
+//   uint64_t created_generation_;
+// #endif  // DCHECK_IS_ON()
 };
 
 template <typename T>
@@ -514,7 +514,7 @@ class circular_deque {
   // Since this class assumes no exceptions, at() and operator[] are equivalent.
 
   const value_type& at(size_type i) const {
-    DCHECK(i < size());
+    // DCHECK(i < size());
     size_t right_size = buffer_.capacity() - begin_;
     if (begin_ <= end_ || i < right_size)
       return buffer_[begin_ + i];
@@ -531,20 +531,20 @@ class circular_deque {
   }
 
   value_type& front() {
-    DCHECK(!empty());
+    // DCHECK(!empty());
     return buffer_[begin_];
   }
   const value_type& front() const {
-    DCHECK(!empty());
+    // DCHECK(!empty());
     return buffer_[begin_];
   }
 
   value_type& back() {
-    DCHECK(!empty());
+    // DCHECK(!empty());
     return *(--end());
   }
   const value_type& back() const {
-    DCHECK(!empty());
+    // DCHECK(!empty());
     return *(--end());
   }
 
@@ -859,7 +859,7 @@ class circular_deque {
   }
 
   void pop_front() {
-    DCHECK(size());
+    // DCHECK(size());
     buffer_.DestructRange(&buffer_[begin_], &buffer_[begin_ + 1]);
     begin_++;
     if (begin_ == buffer_.capacity())
@@ -874,7 +874,7 @@ class circular_deque {
     IncrementGeneration();
   }
   void pop_back() {
-    DCHECK(size());
+    // DCHECK(size());
     if (end_ == 0)
       end_ = buffer_.capacity() - 1;
     else
@@ -1040,37 +1040,37 @@ class circular_deque {
     }
   }
 
-#if DCHECK_IS_ON()
-  // Asserts the given index is dereferencable. The index is an index into the
-  // buffer, not an index used by operator[] or at() which will be offsets from
-  // begin.
-  void CheckValidIndex(size_t i) const {
-    if (begin_ <= end_)
-      DCHECK(i >= begin_ && i < end_);
-    else
-      DCHECK((i >= begin_ && i < buffer_.capacity()) || i < end_);
-  }
-
-  // Asserts the given index is either dereferencable or points to end().
-  void CheckValidIndexOrEnd(size_t i) const {
-    if (i != end_)
-      CheckValidIndex(i);
-  }
-
-  void ValidateIterator(const const_iterator& i) const {
-    DCHECK(i.parent_deque_ == this);
-    i.CheckUnstableUsage();
-  }
-
-  // See generation_ below.
-  void IncrementGeneration() { generation_++; }
-#else
+// #if DCHECK_IS_ON()
+//   // Asserts the given index is dereferencable. The index is an index into the
+//   // buffer, not an index used by operator[] or at() which will be offsets from
+//   // begin.
+//   void CheckValidIndex(size_t i) const {
+//     if (begin_ <= end_)
+//       DCHECK(i >= begin_ && i < end_);
+//     else
+//       DCHECK((i >= begin_ && i < buffer_.capacity()) || i < end_);
+//   }
+//
+//   // Asserts the given index is either dereferencable or points to end().
+//   void CheckValidIndexOrEnd(size_t i) const {
+//     if (i != end_)
+//       CheckValidIndex(i);
+//   }
+//
+//   void ValidateIterator(const const_iterator& i) const {
+//     DCHECK(i.parent_deque_ == this);
+//     i.CheckUnstableUsage();
+//   }
+//
+//   // See generation_ below.
+//   void IncrementGeneration() { generation_++; }
+// #else
   // No-op versions of these functions for release builds.
   void CheckValidIndex(size_t) const {}
   void CheckValidIndexOrEnd(size_t) const {}
   void ValidateIterator(const const_iterator& i) const {}
   void IncrementGeneration() {}
-#endif
+// #endif
 
   // Danger, the buffer_.capacity() is the "internal capacity" which is
   // capacity() + 1 since there is an extra item to indicate the end. Otherwise
@@ -1086,11 +1086,11 @@ class circular_deque {
   size_type begin_ = 0;
   size_type end_ = 0;
 
-#if DCHECK_IS_ON()
-  // Incremented every time a modification is made that could affect iterator
-  // invalidations.
-  uint64_t generation_ = 0;
-#endif
+// #if DCHECK_IS_ON()
+//   // Incremented every time a modification is made that could affect iterator
+//   // invalidations.
+//   uint64_t generation_ = 0;
+// #endif
 };
 
 // Implementations of base::Erase[If] (see base/stl_util.h).

@@ -11,7 +11,7 @@
 #include <string.h>
 #include <wchar.h>
 
-#include "base/logging.h"
+// #include "base/logging.h"
 
 namespace base {
 
@@ -28,7 +28,7 @@ inline int vsnprintf(char* buffer, size_t size,
 
 inline int vswprintf(wchar_t* buffer, size_t size,
                      const wchar_t* format, va_list arguments) {
-  DCHECK(IsWprintfFormatPortable(format));
+  // DCHECK(IsWprintfFormatPortable(format));
   return ::vswprintf(buffer, size, format, arguments);
 }
 

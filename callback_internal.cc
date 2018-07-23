@@ -4,7 +4,7 @@
 
 #include "base/callback_internal.h"
 
-#include "base/logging.h"
+// #include "base/logging.h"
 
 namespace base {
 namespace internal {
@@ -57,7 +57,7 @@ void CallbackBase::Reset() {
 }
 
 bool CallbackBase::IsCancelled() const {
-  DCHECK(bind_state_);
+  // DCHECK(bind_state_);
   return bind_state_->IsCancelled();
 }
 

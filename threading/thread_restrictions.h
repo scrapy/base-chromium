@@ -6,8 +6,8 @@
 #define BASE_THREADING_THREAD_RESTRICTIONS_H_
 
 #include "base/base_export.h"
-#include "base/gtest_prod_util.h"
-#include "base/logging.h"
+// #include "base/gtest_prod_util.h"
+// #include "base/logging.h"
 #include "base/macros.h"
 
 class BrowserProcessImpl;
@@ -154,14 +154,14 @@ class StackSamplingProfiler;
 class Thread;
 class ThreadTestHelper;
 
-#if DCHECK_IS_ON()
-#define INLINE_IF_DCHECK_IS_OFF BASE_EXPORT
-#define EMPTY_BODY_IF_DCHECK_IS_OFF
-#else
+// #if DCHECK_IS_ON()
+// #define INLINE_IF_DCHECK_IS_OFF BASE_EXPORT
+// #define EMPTY_BODY_IF_DCHECK_IS_OFF
+// #else
 #define INLINE_IF_DCHECK_IS_OFF inline
 #define EMPTY_BODY_IF_DCHECK_IS_OFF \
   {}
-#endif
+// #endif
 
 // A "blocking call" refers to any call that causes the calling thread to wait
 // off-CPU. It includes but is not limited to calls that wait on synchronous
@@ -203,9 +203,9 @@ class BASE_EXPORT ScopedDisallowBlocking {
   ~ScopedDisallowBlocking() EMPTY_BODY_IF_DCHECK_IS_OFF;
 
  private:
-#if DCHECK_IS_ON()
-  const bool was_disallowed_;
-#endif
+// #if DCHECK_IS_ON()
+//   const bool was_disallowed_;
+// #endif
 
   DISALLOW_COPY_AND_ASSIGN(ScopedDisallowBlocking);
 };
@@ -219,7 +219,7 @@ class BASE_EXPORT ScopedAllowBlocking {
  private:
   // This can only be instantiated by friends. Use ScopedAllowBlockingForTesting
   // in unit tests to avoid the friend requirement.
-  FRIEND_TEST_ALL_PREFIXES(ThreadRestrictionsTest, ScopedAllowBlocking);
+  // FRIEND_TEST_ALL_PREFIXES(ThreadRestrictionsTest, ScopedAllowBlocking);
   friend class android_webview::ScopedAllowInitGLBindings;
   friend class content::BrowserProcessSubThread;
   friend class content::GpuProcessTransportFactory;
@@ -235,9 +235,9 @@ class BASE_EXPORT ScopedAllowBlocking {
   ScopedAllowBlocking() EMPTY_BODY_IF_DCHECK_IS_OFF;
   ~ScopedAllowBlocking() EMPTY_BODY_IF_DCHECK_IS_OFF;
 
-#if DCHECK_IS_ON()
-  const bool was_disallowed_;
-#endif
+// #if DCHECK_IS_ON()
+//   const bool was_disallowed_;
+// #endif
 
   DISALLOW_COPY_AND_ASSIGN(ScopedAllowBlocking);
 };
@@ -248,9 +248,9 @@ class ScopedAllowBlockingForTesting {
   ~ScopedAllowBlockingForTesting() {}
 
  private:
-#if DCHECK_IS_ON()
-  ScopedAllowBlocking scoped_allow_blocking_;
-#endif
+// #if DCHECK_IS_ON()
+//   ScopedAllowBlocking scoped_allow_blocking_;
+// #endif
 
   DISALLOW_COPY_AND_ASSIGN(ScopedAllowBlockingForTesting);
 };
@@ -283,12 +283,12 @@ class BASE_EXPORT ScopedAllowBaseSyncPrimitives {
   // This can only be instantiated by friends. Use
   // ScopedAllowBaseSyncPrimitivesForTesting in unit tests to avoid the friend
   // requirement.
-  FRIEND_TEST_ALL_PREFIXES(ThreadRestrictionsTest,
-                           ScopedAllowBaseSyncPrimitives);
-  FRIEND_TEST_ALL_PREFIXES(ThreadRestrictionsTest,
-                           ScopedAllowBaseSyncPrimitivesResetsState);
-  FRIEND_TEST_ALL_PREFIXES(ThreadRestrictionsTest,
-                           ScopedAllowBaseSyncPrimitivesWithBlockingDisallowed);
+  // FRIEND_TEST_ALL_PREFIXES(ThreadRestrictionsTest,
+  //                          ScopedAllowBaseSyncPrimitives);
+  // FRIEND_TEST_ALL_PREFIXES(ThreadRestrictionsTest,
+  //                          ScopedAllowBaseSyncPrimitivesResetsState);
+  // FRIEND_TEST_ALL_PREFIXES(ThreadRestrictionsTest,
+  //                          ScopedAllowBaseSyncPrimitivesWithBlockingDisallowed);
   friend class base::GetAppOutputScopedAllowBaseSyncPrimitives;
   friend class content::BrowserProcessSubThread;
   friend class content::SessionStorageDatabase;
@@ -305,9 +305,9 @@ class BASE_EXPORT ScopedAllowBaseSyncPrimitives {
   ScopedAllowBaseSyncPrimitives() EMPTY_BODY_IF_DCHECK_IS_OFF;
   ~ScopedAllowBaseSyncPrimitives() EMPTY_BODY_IF_DCHECK_IS_OFF;
 
-#if DCHECK_IS_ON()
-  const bool was_disallowed_;
-#endif
+// #if DCHECK_IS_ON()
+//   const bool was_disallowed_;
+// #endif
 
   DISALLOW_COPY_AND_ASSIGN(ScopedAllowBaseSyncPrimitives);
 };
@@ -318,11 +318,11 @@ class BASE_EXPORT ScopedAllowBaseSyncPrimitivesOutsideBlockingScope {
   // This can only be instantiated by friends. Use
   // ScopedAllowBaseSyncPrimitivesForTesting in unit tests to avoid the friend
   // requirement.
-  FRIEND_TEST_ALL_PREFIXES(ThreadRestrictionsTest,
-                           ScopedAllowBaseSyncPrimitivesOutsideBlockingScope);
-  FRIEND_TEST_ALL_PREFIXES(
-      ThreadRestrictionsTest,
-      ScopedAllowBaseSyncPrimitivesOutsideBlockingScopeResetsState);
+  // FRIEND_TEST_ALL_PREFIXES(ThreadRestrictionsTest,
+  //                          ScopedAllowBaseSyncPrimitivesOutsideBlockingScope);
+  // FRIEND_TEST_ALL_PREFIXES(
+  //     ThreadRestrictionsTest,
+  //     ScopedAllowBaseSyncPrimitivesOutsideBlockingScopeResetsState);
   friend class ::KeyStorageLinux;
   friend class content::SynchronousCompositor;
   friend class content::SynchronousCompositorHost;
@@ -336,9 +336,9 @@ class BASE_EXPORT ScopedAllowBaseSyncPrimitivesOutsideBlockingScope {
   ~ScopedAllowBaseSyncPrimitivesOutsideBlockingScope()
       EMPTY_BODY_IF_DCHECK_IS_OFF;
 
-#if DCHECK_IS_ON()
-  const bool was_disallowed_;
-#endif
+// #if DCHECK_IS_ON()
+//   const bool was_disallowed_;
+// #endif
 
   DISALLOW_COPY_AND_ASSIGN(ScopedAllowBaseSyncPrimitivesOutsideBlockingScope);
 };
@@ -351,9 +351,9 @@ class BASE_EXPORT ScopedAllowBaseSyncPrimitivesForTesting {
   ~ScopedAllowBaseSyncPrimitivesForTesting() EMPTY_BODY_IF_DCHECK_IS_OFF;
 
  private:
-#if DCHECK_IS_ON()
-  const bool was_disallowed_;
-#endif
+// #if DCHECK_IS_ON()
+//   const bool was_disallowed_;
+// #endif
 
   DISALLOW_COPY_AND_ASSIGN(ScopedAllowBaseSyncPrimitivesForTesting);
 };
@@ -383,42 +383,42 @@ class BASE_EXPORT ThreadRestrictions {
     ~ScopedAllowIO() EMPTY_BODY_IF_DCHECK_IS_OFF;
 
    private:
-#if DCHECK_IS_ON()
-    const bool was_allowed_;
-#endif
+// #if DCHECK_IS_ON()
+//     const bool was_allowed_;
+// #endif
 
     DISALLOW_COPY_AND_ASSIGN(ScopedAllowIO);
   };
 
-#if DCHECK_IS_ON()
-  // Set whether the current thread to make IO calls.
-  // Threads start out in the *allowed* state.
-  // Returns the previous value.
-  //
-  // DEPRECATED. Use ScopedAllowBlocking(ForTesting) or ScopedDisallowBlocking.
-  static bool SetIOAllowed(bool allowed);
-
-  // Set whether the current thread can use singletons.  Returns the previous
-  // value.
-  static bool SetSingletonAllowed(bool allowed);
-
-  // Check whether the current thread is allowed to use singletons (Singleton /
-  // LazyInstance).  DCHECKs if not.
-  static void AssertSingletonAllowed();
-
-  // Disable waiting on the current thread. Threads start out in the *allowed*
-  // state. Returns the previous value.
-  //
-  // DEPRECATED. Use DisallowBaseSyncPrimitives.
-  static void DisallowWaiting();
-#else
+// #if DCHECK_IS_ON()
+//   // Set whether the current thread to make IO calls.
+//   // Threads start out in the *allowed* state.
+//   // Returns the previous value.
+//   //
+//   // DEPRECATED. Use ScopedAllowBlocking(ForTesting) or ScopedDisallowBlocking.
+//   static bool SetIOAllowed(bool allowed);
+//
+//   // Set whether the current thread can use singletons.  Returns the previous
+//   // value.
+//   static bool SetSingletonAllowed(bool allowed);
+//
+//   // Check whether the current thread is allowed to use singletons (Singleton /
+//   // LazyInstance).  DCHECKs if not.
+//   static void AssertSingletonAllowed();
+//
+//   // Disable waiting on the current thread. Threads start out in the *allowed*
+//   // state. Returns the previous value.
+//   //
+//   // DEPRECATED. Use DisallowBaseSyncPrimitives.
+//   static void DisallowWaiting();
+// #else
   // Inline the empty definitions of these functions so that they can be
   // compiled out.
   static bool SetIOAllowed(bool allowed) { return true; }
   static bool SetSingletonAllowed(bool allowed) { return true; }
   static void AssertSingletonAllowed() {}
   static void DisallowWaiting() {}
-#endif
+// #endif
 
  private:
   // DO NOT ADD ANY OTHER FRIEND STATEMENTS.
@@ -469,19 +469,19 @@ class BASE_EXPORT ThreadRestrictions {
   friend class net::NetworkChangeNotifierMac;     // http://crbug.com/125097
   friend class ::BrowserProcessImpl;              // http://crbug.com/125207
   friend class ::NativeBackendKWallet;            // http://crbug.com/125331
-#if !defined(OFFICIAL_BUILD)
-  friend class content::SoftwareOutputDeviceMus;  // Interim non-production code
-#endif
+// #if !defined(OFFICIAL_BUILD)
+//   friend class content::SoftwareOutputDeviceMus;  // Interim non-production code
+// #endif
   friend class views::ScreenMus;
   friend class viz::ServerGpuMemoryBufferManager;
 // END USAGE THAT NEEDS TO BE FIXED.
 
-#if DCHECK_IS_ON()
-  // DEPRECATED. Use ScopedAllowBaseSyncPrimitives.
-  static bool SetWaitAllowed(bool allowed);
-#else
+// #if DCHECK_IS_ON()
+//   // DEPRECATED. Use ScopedAllowBaseSyncPrimitives.
+//   static bool SetWaitAllowed(bool allowed);
+// #else
   static bool SetWaitAllowed(bool allowed) { return true; }
-#endif
+// #endif
 
   // Constructing a ScopedAllowWait temporarily allows waiting on the current
   // thread.  Doing this is almost always incorrect, which is why we limit who
@@ -494,9 +494,9 @@ class BASE_EXPORT ThreadRestrictions {
     ~ScopedAllowWait() EMPTY_BODY_IF_DCHECK_IS_OFF;
 
    private:
-#if DCHECK_IS_ON()
-    const bool was_allowed_;
-#endif
+// #if DCHECK_IS_ON()
+//     const bool was_allowed_;
+// #endif
 
     DISALLOW_COPY_AND_ASSIGN(ScopedAllowWait);
   };

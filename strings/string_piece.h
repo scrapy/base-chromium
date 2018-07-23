@@ -28,7 +28,7 @@
 #include <string>
 
 #include "base/base_export.h"
-#include "base/logging.h"
+// #include "base/logging.h"
 #include "base/strings/char_traits.h"
 #include "base/strings/string16.h"
 #include "base/strings/string_piece_forward.h"
@@ -140,13 +140,13 @@ BASE_EXPORT StringPiece16 substr(const StringPiece16& self,
                                  size_t pos,
                                  size_t n);
 
-#if DCHECK_IS_ON()
-// Asserts that begin <= end to catch some errors with iterator usage.
-BASE_EXPORT void AssertIteratorsInOrder(std::string::const_iterator begin,
-                                        std::string::const_iterator end);
-BASE_EXPORT void AssertIteratorsInOrder(string16::const_iterator begin,
-                                        string16::const_iterator end);
-#endif
+// #if DCHECK_IS_ON()
+// // Asserts that begin <= end to catch some errors with iterator usage.
+// BASE_EXPORT void AssertIteratorsInOrder(std::string::const_iterator begin,
+//                                         std::string::const_iterator end);
+// BASE_EXPORT void AssertIteratorsInOrder(string16::const_iterator begin,
+//                                         string16::const_iterator end);
+// #endif
 
 }  // namespace internal
 
@@ -189,11 +189,11 @@ template <typename STRING_TYPE> class BasicStringPiece {
       : ptr_(offset), length_(len) {}
   BasicStringPiece(const typename STRING_TYPE::const_iterator& begin,
                    const typename STRING_TYPE::const_iterator& end) {
-#if DCHECK_IS_ON()
-    // This assertion is done out-of-line to avoid bringing in logging.h and
-    // instantiating logging macros for every instantiation.
-    internal::AssertIteratorsInOrder(begin, end);
-#endif
+// #if DCHECK_IS_ON()
+//     // This assertion is done out-of-line to avoid bringing in logging.h and
+//     // instantiating logging macros for every instantiation.
+//     internal::AssertIteratorsInOrder(begin, end);
+// #endif
     length_ = static_cast<size_t>(std::distance(begin, end));
 
     // The length test before assignment is to avoid dereferencing an iterator
@@ -224,28 +224,28 @@ template <typename STRING_TYPE> class BasicStringPiece {
   }
 
   constexpr value_type operator[](size_type i) const {
-    CHECK(i < length_);
+    // CHECK(i < length_);
     return ptr_[i];
   }
 
   value_type front() const {
-    CHECK_NE(0UL, length_);
+    // CHECK_NE(0UL, length_);
     return ptr_[0];
   }
 
   value_type back() const {
-    CHECK_NE(0UL, length_);
+    // CHECK_NE(0UL, length_);
     return ptr_[length_ - 1];
   }
 
   constexpr void remove_prefix(size_type n) {
-    CHECK(n <= length_);
+    // CHECK(n <= length_);
     ptr_ += n;
     length_ -= n;
   }
 
   constexpr void remove_suffix(size_type n) {
-    CHECK(n <= length_);
+    // CHECK(n <= length_);
     length_ -= n;
   }
 

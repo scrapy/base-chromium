@@ -59,7 +59,7 @@
 
 #include "base/base_export.h"
 #include "base/compiler_specific.h"
-#include "base/logging.h"
+// #include "base/logging.h"
 #include "base/numerics/safe_math.h"
 #include "build/build_config.h"
 
@@ -794,7 +794,7 @@ constexpr TimeDelta TimeDelta::FromDouble(double value) {
 // static
 constexpr TimeDelta TimeDelta::FromProduct(int64_t value,
                                            int64_t positive_value) {
-  DCHECK(positive_value > 0);
+  // DCHECK(positive_value > 0);
   return value > std::numeric_limits<int64_t>::max() / positive_value
              ? Max()
              : value < std::numeric_limits<int64_t>::min() / positive_value

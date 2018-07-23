@@ -11,8 +11,9 @@
 #include <type_traits>
 #include <utility>
 
-#include "base/logging.h"
+// #include "base/logging.h"
 #include "base/macros.h"
+#include "base/template_util.h"
 
 namespace base {
 namespace internal {
@@ -108,7 +109,7 @@ class VectorBuffer {
             typename std::enable_if<base::is_trivially_copyable<T2>::value,
                                     int>::type = 0>
   static void MoveRange(T* from_begin, T* from_end, T* to) {
-    DCHECK(!RangesOverlap(from_begin, from_end, to));
+    // DCHECK(!RangesOverlap(from_begin, from_end, to));
     memcpy(to, from_begin, (from_end - from_begin) * sizeof(T));
   }
 
@@ -119,7 +120,7 @@ class VectorBuffer {
                                         !base::is_trivially_copyable<T2>::value,
                                     int>::type = 0>
   static void MoveRange(T* from_begin, T* from_end, T* to) {
-    DCHECK(!RangesOverlap(from_begin, from_end, to));
+    // DCHECK(!RangesOverlap(from_begin, from_end, to));
     while (from_begin != from_end) {
       new (to) T(std::move(*from_begin));
       from_begin->~T();
@@ -135,7 +136,7 @@ class VectorBuffer {
                                         !base::is_trivially_copyable<T2>::value,
                                     int>::type = 0>
   static void MoveRange(T* from_begin, T* from_end, T* to) {
-    DCHECK(!RangesOverlap(from_begin, from_end, to));
+    // DCHECK(!RangesOverlap(from_begin, from_end, to));
     while (from_begin != from_end) {
       new (to) T(*from_begin);
       from_begin->~T();

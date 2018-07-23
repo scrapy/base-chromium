@@ -12,7 +12,7 @@
 #include <utility>
 
 #include "base/compiler_specific.h"
-#include "base/logging.h"
+// #include "base/logging.h"
 #include "base/macros.h"
 
 template <class T>
@@ -64,8 +64,8 @@ scoped_refptr<T> AdoptRef(T* obj) {
   static_assert(std::is_same<subtle::StartRefCountFromOneTag, Tag>::value,
                 "Use AdoptRef only for the reference count starts from one.");
 
-  DCHECK(obj);
-  DCHECK(obj->HasOneRef());
+  // DCHECK(obj);
+  // DCHECK(obj->HasOneRef());
   obj->Adopted();
   return scoped_refptr<T>(obj, subtle::kAdoptRefTag);
 }
@@ -211,12 +211,12 @@ class scoped_refptr {
   T* get() const { return ptr_; }
 
   T& operator*() const {
-    DCHECK(ptr_);
+    // DCHECK(ptr_);
     return *ptr_;
   }
 
   T* operator->() const {
-    DCHECK(ptr_);
+    // DCHECK(ptr_);
     return ptr_;
   }
 

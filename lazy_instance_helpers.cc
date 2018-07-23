@@ -28,20 +28,20 @@ bool NeedsLazyInstance(subtle::AtomicWord* state) {
   // state_ == STATE_CREATED needs to acquire visibility over
   // the associated data (buf_). Pairing Release_Store is in
   // CompleteLazyInstance().
-  if (subtle::Acquire_Load(state) == kLazyInstanceStateCreating) {
-    const base::TimeTicks start = base::TimeTicks::Now();
-    do {
-      const base::TimeDelta elapsed = base::TimeTicks::Now() - start;
-      // Spin with YieldCurrentThread for at most one ms - this ensures maximum
-      // responsiveness. After that spin with Sleep(1ms) so that we don't burn
-      // excessive CPU time - this also avoids infinite loops due to priority
-      // inversions (https://crbug.com/797129).
-      if (elapsed < TimeDelta::FromMilliseconds(1))
-        PlatformThread::YieldCurrentThread();
-      else
-        PlatformThread::Sleep(TimeDelta::FromMilliseconds(1));
-    } while (subtle::Acquire_Load(state) == kLazyInstanceStateCreating);
-  }
+  // if (subtle::Acquire_Load(state) == kLazyInstanceStateCreating) {
+  //   const base::TimeTicks start = base::TimeTicks::Now();
+  //   do {
+  //     const base::TimeDelta elapsed = base::TimeTicks::Now() - start;
+  //     // Spin with YieldCurrentThread for at most one ms - this ensures maximum
+  //     // responsiveness. After that spin with Sleep(1ms) so that we don't burn
+  //     // excessive CPU time - this also avoids infinite loops due to priority
+  //     // inversions (https://crbug.com/797129).
+  //     if (elapsed < TimeDelta::FromMilliseconds(1))
+  //       PlatformThread::YieldCurrentThread();
+  //     else
+  //       PlatformThread::Sleep(TimeDelta::FromMilliseconds(1));
+  //   } while (subtle::Acquire_Load(state) == kLazyInstanceStateCreating);
+  // }
   // Someone else created the instance.
   return false;
 }

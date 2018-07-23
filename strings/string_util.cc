@@ -20,7 +20,7 @@
 #include <limits>
 #include <vector>
 
-#include "base/logging.h"
+// #include "base/logging.h"
 #include "base/macros.h"
 #include "base/memory/singleton.h"
 #include "base/strings/utf_string_conversion_utils.h"
@@ -352,13 +352,13 @@ StringPiece TrimString(StringPiece input,
 void TruncateUTF8ToByteSize(const std::string& input,
                             const size_t byte_size,
                             std::string* output) {
-  DCHECK(output);
+  // DCHECK(output);
   if (byte_size > input.length()) {
     *output = input;
     return;
   }
-  DCHECK_LE(byte_size,
-            static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
+  // DCHECK_LE(byte_size,
+  //           static_cast<uint32_t>(std::numeric_limits<int32_t>::max()));
   // Note: This cast is necessary because CBU8_NEXT uses int32_ts.
   int32_t truncation_length = static_cast<int32_t>(byte_size);
   int32_t char_index = truncation_length - 1;
@@ -586,7 +586,7 @@ bool StartsWithT(BasicStringPiece<Str> str,
           CaseInsensitiveCompareASCII<typename Str::value_type>());
 
     default:
-      NOTREACHED();
+      // NOTREACHED();
       return false;
   }
 }
@@ -624,7 +624,7 @@ bool EndsWithT(BasicStringPiece<Str> str,
           CaseInsensitiveCompareASCII<typename Str::value_type>());
 
     default:
-      NOTREACHED();
+      // NOTREACHED();
       return false;
   }
 }
@@ -642,7 +642,7 @@ bool EndsWith(StringPiece16 str,
 }
 
 char HexDigitToInt(wchar_t c) {
-  DCHECK(IsHexDigit(c));
+  // DCHECK(IsHexDigit(c));
   if (c >= '0' && c <= '9')
     return static_cast<char>(c - '0');
   if (c >= 'A' && c <= 'F')
@@ -918,7 +918,7 @@ void ReplaceSubstringsAfterOffset(std::string* str,
 template <class string_type>
 inline typename string_type::value_type* WriteIntoT(string_type* str,
                                                     size_t length_with_null) {
-  DCHECK_GT(length_with_null, 1u);
+  // DCHECK_GT(length_with_null, 1u);
   str->reserve(length_with_null);
   str->resize(length_with_null - 1);
   return &((*str)[0]);
@@ -956,7 +956,7 @@ static string_type JoinStringT(const list_type& parts,
   result.reserve(total_size);
 
   auto iter = parts.begin();
-  DCHECK(iter != parts.end());
+  // DCHECK(iter != parts.end());
   AppendToString(&result, *iter);
   ++iter;
 
@@ -969,7 +969,7 @@ static string_type JoinStringT(const list_type& parts,
   }
 
   // Sanity-check that we pre-allocated correctly.
-  DCHECK_EQ(total_size, result.size());
+  // DCHECK_EQ(total_size, result.size());
 
   return result;
 }
@@ -1015,7 +1015,7 @@ OutStringType DoReplaceStringPlaceholders(
     const std::vector<OutStringType>& subst,
     std::vector<size_t>* offsets) {
   size_t substitutions = subst.size();
-  DCHECK_LT(substitutions, 10U);
+  // DCHECK_LT(substitutions, 10U);
 
   size_t sub_length = 0;
   for (const auto& cur : subst)
@@ -1037,7 +1037,7 @@ OutStringType DoReplaceStringPlaceholders(
           --i;
         } else {
           if (*i < '1' || *i > '9') {
-            DLOG(ERROR) << "Invalid placeholder: $" << *i;
+            // DLOG(ERROR) << "Invalid placeholder: $" << *i;
             continue;
           }
           uintptr_t index = *i - '1';
@@ -1084,7 +1084,7 @@ string16 ReplaceStringPlaceholders(const string16& format_string,
   subst.push_back(a);
   string16 result = ReplaceStringPlaceholders(format_string, subst, &offsets);
 
-  DCHECK_EQ(1U, offsets.size());
+  // DCHECK_EQ(1U, offsets.size());
   if (offset)
     *offset = offsets[0];
   return result;

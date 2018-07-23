@@ -31,7 +31,7 @@
 #include "base/atomicops.h"
 #include "base/base_export.h"
 #include "base/lazy_instance_helpers.h"
-#include "base/logging.h"
+// #include "base/logging.h"
 #include "base/macros.h"
 #include "base/threading/thread_restrictions.h"
 
@@ -58,12 +58,12 @@ struct DefaultSingletonTraits {
   // exit. See below for the required call that makes this happen.
   static const bool kRegisterAtExit = true;
 
-#if DCHECK_IS_ON()
-  // Set to false to disallow access on a non-joinable thread.  This is
-  // different from kRegisterAtExit because StaticMemorySingletonTraits allows
-  // access on non-joinable threads, and gracefully handles this.
-  static const bool kAllowedToAccessOnNonjoinableThread = false;
-#endif
+// #if DCHECK_IS_ON()
+//   // Set to false to disallow access on a non-joinable thread.  This is
+//   // different from kRegisterAtExit because StaticMemorySingletonTraits allows
+//   // access on non-joinable threads, and gracefully handles this.
+//   static const bool kAllowedToAccessOnNonjoinableThread = false;
+// #endif
 };
 
 
@@ -73,9 +73,9 @@ struct DefaultSingletonTraits {
 template<typename Type>
 struct LeakySingletonTraits : public DefaultSingletonTraits<Type> {
   static const bool kRegisterAtExit = false;
-#if DCHECK_IS_ON()
-  static const bool kAllowedToAccessOnNonjoinableThread = true;
-#endif
+// #if DCHECK_IS_ON()
+//   static const bool kAllowedToAccessOnNonjoinableThread = true;
+// #endif
 };
 
 // Alternate traits for use with the Singleton<Type>.  Allocates memory
@@ -117,9 +117,9 @@ struct StaticMemorySingletonTraits {
 
   static const bool kRegisterAtExit = true;
 
-#if DCHECK_IS_ON()
-  static const bool kAllowedToAccessOnNonjoinableThread = true;
-#endif
+// #if DCHECK_IS_ON()
+//   static const bool kAllowedToAccessOnNonjoinableThread = true;
+// #endif
 
   static void ResurrectForTesting() { subtle::NoBarrier_Store(&dead_, 0); }
 
@@ -228,10 +228,10 @@ class Singleton {
 
   // Return a pointer to the one true instance of the class.
   static Type* get() {
-#if DCHECK_IS_ON()
-    if (!Traits::kAllowedToAccessOnNonjoinableThread)
-      ThreadRestrictions::AssertSingletonAllowed();
-#endif
+// #if DCHECK_IS_ON()
+//     if (!Traits::kAllowedToAccessOnNonjoinableThread)
+//       ThreadRestrictions::AssertSingletonAllowed();
+// #endif
 
     return subtle::GetOrCreateLazyPointer(
         &instance_, &CreatorFunc, nullptr,

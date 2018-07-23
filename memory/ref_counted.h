@@ -12,7 +12,7 @@
 #include "base/atomic_ref_count.h"
 #include "base/base_export.h"
 #include "base/compiler_specific.h"
-#include "base/logging.h"
+// #include "base/logging.h"
 #include "base/macros.h"
 #include "base/memory/scoped_refptr.h"
 #include "base/sequence_checker.h"
@@ -28,22 +28,22 @@ class BASE_EXPORT RefCountedBase {
 
  protected:
   explicit RefCountedBase(StartRefCountFromZeroTag) {
-#if DCHECK_IS_ON()
-    sequence_checker_.DetachFromSequence();
-#endif
+// #if DCHECK_IS_ON()
+//     sequence_checker_.DetachFromSequence();
+// #endif
   }
 
   explicit RefCountedBase(StartRefCountFromOneTag) : ref_count_(1) {
-#if DCHECK_IS_ON()
-    needs_adopt_ref_ = true;
-    sequence_checker_.DetachFromSequence();
-#endif
+// #if DCHECK_IS_ON()
+//     needs_adopt_ref_ = true;
+//     sequence_checker_.DetachFromSequence();
+// #endif
   }
 
   ~RefCountedBase() {
-#if DCHECK_IS_ON()
-    DCHECK(in_dtor_) << "RefCounted object deleted without calling Release()";
-#endif
+// #if DCHECK_IS_ON()
+//     DCHECK(in_dtor_) << "RefCounted object deleted without calling Release()";
+// #endif
   }
 
   void AddRef() const {
@@ -51,16 +51,16 @@ class BASE_EXPORT RefCountedBase {
     // Current thread books the critical section "AddRelease"
     // without release it.
     // DFAKE_SCOPED_LOCK_THREAD_LOCKED(add_release_);
-#if DCHECK_IS_ON()
-    DCHECK(!in_dtor_);
-    DCHECK(!needs_adopt_ref_)
-        << "This RefCounted object is created with non-zero reference count."
-        << " The first reference to such a object has to be made by AdoptRef or"
-        << " MakeRefCounted.";
-    if (ref_count_ >= 1) {
-      DCHECK(CalledOnValidSequence());
-    }
-#endif
+// #if DCHECK_IS_ON()
+//     DCHECK(!in_dtor_);
+//     DCHECK(!needs_adopt_ref_)
+//         << "This RefCounted object is created with non-zero reference count."
+//         << " The first reference to such a object has to be made by AdoptRef or"
+//         << " MakeRefCounted.";
+//     if (ref_count_ >= 1) {
+//       DCHECK(CalledOnValidSequence());
+//     }
+// #endif
 
     AddRefImpl();
   }
@@ -74,16 +74,16 @@ class BASE_EXPORT RefCountedBase {
     // without release it.
     // DFAKE_SCOPED_LOCK_THREAD_LOCKED(add_release_);
 
-#if DCHECK_IS_ON()
-    DCHECK(!in_dtor_);
-    if (ref_count_ == 0)
-      in_dtor_ = true;
-
-    if (ref_count_ >= 1)
-      DCHECK(CalledOnValidSequence());
-    if (ref_count_ == 1)
-      sequence_checker_.DetachFromSequence();
-#endif
+// #if DCHECK_IS_ON()
+//     DCHECK(!in_dtor_);
+//     if (ref_count_ == 0)
+//       in_dtor_ = true;
+//
+//     if (ref_count_ >= 1)
+//       DCHECK(CalledOnValidSequence());
+//     if (ref_count_ == 1)
+//       sequence_checker_.DetachFromSequence();
+// #endif
 
     return ref_count_ == 0;
   }
@@ -102,11 +102,11 @@ class BASE_EXPORT RefCountedBase {
   // reference, or if the object is accessed from multiple threads
   // simultaneously.
   bool IsOnValidSequence() const {
-#if DCHECK_IS_ON()
-    return ref_count_ <= 1 || CalledOnValidSequence();
-#else
+// #if DCHECK_IS_ON()
+//     return ref_count_ <= 1 || CalledOnValidSequence();
+// #else
     return true;
-#endif
+// #endif
   }
 
  private:
@@ -114,10 +114,10 @@ class BASE_EXPORT RefCountedBase {
   friend scoped_refptr<U> base::AdoptRef(U*);
 
   void Adopted() const {
-#if DCHECK_IS_ON()
-    DCHECK(needs_adopt_ref_);
-    needs_adopt_ref_ = false;
-#endif
+// #if DCHECK_IS_ON()
+//     DCHECK(needs_adopt_ref_);
+//     needs_adopt_ref_ = false;
+// #endif
   }
 
 #if defined(ARCH_CPU_64_BIT)
@@ -126,17 +126,17 @@ class BASE_EXPORT RefCountedBase {
   void AddRefImpl() const { ++ref_count_; }
 #endif
 
-#if DCHECK_IS_ON()
-  bool CalledOnValidSequence() const;
-#endif
+// #if DCHECK_IS_ON()
+//   bool CalledOnValidSequence() const;
+// #endif
 
   mutable uint32_t ref_count_ = 0;
 
-#if DCHECK_IS_ON()
-  mutable bool needs_adopt_ref_ = false;
-  mutable bool in_dtor_ = false;
-  mutable SequenceChecker sequence_checker_;
-#endif
+// #if DCHECK_IS_ON()
+//   mutable bool needs_adopt_ref_ = false;
+//   mutable bool in_dtor_ = false;
+//   mutable SequenceChecker sequence_checker_;
+// #endif
 
   DFAKE_MUTEX(add_release_);
 
@@ -151,16 +151,16 @@ class BASE_EXPORT RefCountedThreadSafeBase {
   explicit constexpr RefCountedThreadSafeBase(StartRefCountFromZeroTag) {}
   explicit constexpr RefCountedThreadSafeBase(StartRefCountFromOneTag)
       : ref_count_(1) {
-#if DCHECK_IS_ON()
-    needs_adopt_ref_ = true;
-#endif
+// #if DCHECK_IS_ON()
+//     needs_adopt_ref_ = true;
+// #endif
   }
 
-#if DCHECK_IS_ON()
-  ~RefCountedThreadSafeBase();
-#else
+// #if DCHECK_IS_ON()
+//   ~RefCountedThreadSafeBase();
+// #else
   ~RefCountedThreadSafeBase() = default;
-#endif
+// #endif
 
 // Release and AddRef are suitable for inlining on X86 because they generate
 // very small code sequences. On other platforms (ARM), it causes a size
@@ -180,42 +180,42 @@ class BASE_EXPORT RefCountedThreadSafeBase {
   friend scoped_refptr<U> base::AdoptRef(U*);
 
   void Adopted() const {
-#if DCHECK_IS_ON()
-    DCHECK(needs_adopt_ref_);
-    needs_adopt_ref_ = false;
-#endif
+// #if DCHECK_IS_ON()
+//     DCHECK(needs_adopt_ref_);
+//     needs_adopt_ref_ = false;
+// #endif
   }
 
   ALWAYS_INLINE void AddRefImpl() const {
-#if DCHECK_IS_ON()
-    DCHECK(!in_dtor_);
-    DCHECK(!needs_adopt_ref_)
-        << "This RefCounted object is created with non-zero reference count."
-        << " The first reference to such a object has to be made by AdoptRef or"
-        << " MakeRefCounted.";
-#endif
+// #if DCHECK_IS_ON()
+//     DCHECK(!in_dtor_);
+//     DCHECK(!needs_adopt_ref_)
+//         << "This RefCounted object is created with non-zero reference count."
+//         << " The first reference to such a object has to be made by AdoptRef or"
+//         << " MakeRefCounted.";
+// #endif
     ref_count_.Increment();
   }
 
   ALWAYS_INLINE bool ReleaseImpl() const {
-#if DCHECK_IS_ON()
-    DCHECK(!in_dtor_);
-    DCHECK(!ref_count_.IsZero());
-#endif
+// #if DCHECK_IS_ON()
+//     DCHECK(!in_dtor_);
+//     DCHECK(!ref_count_.IsZero());
+// #endif
     if (!ref_count_.Decrement()) {
-#if DCHECK_IS_ON()
-      in_dtor_ = true;
-#endif
+// #if DCHECK_IS_ON()
+//       in_dtor_ = true;
+// #endif
       return true;
     }
     return false;
   }
 
   mutable AtomicRefCount ref_count_{0};
-#if DCHECK_IS_ON()
-  mutable bool needs_adopt_ref_ = false;
-  mutable bool in_dtor_ = false;
-#endif
+// #if DCHECK_IS_ON()
+//   mutable bool needs_adopt_ref_ = false;
+//   mutable bool in_dtor_ = false;
+// #endif
 
   DISALLOW_COPY_AND_ASSIGN(RefCountedThreadSafeBase);
 };
@@ -234,13 +234,13 @@ class BASE_EXPORT RefCountedThreadSafeBase {
 // ScopedAllowCrossThreadRefCountAccess.
 class BASE_EXPORT ScopedAllowCrossThreadRefCountAccess final {
  public:
-#if DCHECK_IS_ON()
-  ScopedAllowCrossThreadRefCountAccess();
-  ~ScopedAllowCrossThreadRefCountAccess();
-#else
+// #if DCHECK_IS_ON()
+//   ScopedAllowCrossThreadRefCountAccess();
+//   ~ScopedAllowCrossThreadRefCountAccess();
+// #else
   ScopedAllowCrossThreadRefCountAccess() {}
   ~ScopedAllowCrossThreadRefCountAccess() {}
-#endif
+// #endif
 };
 
 //
@@ -318,7 +318,7 @@ class RefCounted : public subtle::RefCountedBase {
       // Prune the code paths which the static analyzer may take to simulate
       // object destruction. Use-after-free errors aren't possible given the
       // lifetime guarantees of the refcounting system.
-      ANALYZER_SKIP_THIS_PATH();
+      // ANALYZER_SKIP_THIS_PATH();
 
       Traits::Destruct(static_cast<const T*>(this));
     }
@@ -383,7 +383,7 @@ class RefCountedThreadSafe : public subtle::RefCountedThreadSafeBase {
 
   void Release() const {
     if (subtle::RefCountedThreadSafeBase::Release()) {
-      ANALYZER_SKIP_THIS_PATH();
+      // ANALYZER_SKIP_THIS_PATH();
       Traits::Destruct(static_cast<const T*>(this));
     }
   }

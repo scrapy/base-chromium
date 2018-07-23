@@ -85,7 +85,7 @@ class OnceCallback<R(Args...)> : public internal::CallbackBase {
     static_assert(!sizeof(*this),
                   "OnceCallback::Run() may only be invoked on a non-const "
                   "rvalue, i.e. std::move(callback).Run().");
-    NOTREACHED();
+    // NOTREACHED();
   }
 
   R Run(Args... args) && {

@@ -7,7 +7,7 @@
 
 #include "base/atomicops.h"
 #include "base/base_export.h"
-#include "base/logging.h"
+// #include "base/logging.h"
 
 // Helper methods used by LazyInstance and a few other base APIs for thread-safe
 // lazy construction.
@@ -60,8 +60,8 @@ Type* GetOrCreateLazyPointer(subtle::AtomicWord* state,
                              void* creator_arg,
                              void (*destructor)(void*),
                              void* destructor_arg) {
-  DCHECK(state);
-  DCHECK(creator_func);
+  // DCHECK(state);
+  // DCHECK(creator_func);
 
   // If any bit in the created mask is true, the instance has already been
   // fully constructed.
@@ -88,7 +88,7 @@ Type* GetOrCreateLazyPointer(subtle::AtomicWord* state,
       // instance (NeedsLazyInstance() doesn't return until the constructing
       // thread releases the instance via CompleteLazyInstance()).
       instance = subtle::Acquire_Load(state);
-      DCHECK(instance & kLazyInstanceCreatedMask);
+      // DCHECK(instance & kLazyInstanceCreatedMask);
     }
   }
   return reinterpret_cast<Type*>(instance);

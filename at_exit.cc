@@ -10,7 +10,7 @@
 
 #include "base/bind.h"
 #include "base/callback.h"
-#include "base/logging.h"
+// #include "base/logging.h"
 
 namespace base {
 
@@ -29,17 +29,17 @@ AtExitManager::AtExitManager()
 // If multiple modules instantiate AtExitManagers they'll end up living in this
 // module... they have to coexist.
 #if !defined(COMPONENT_BUILD)
-  DCHECK(!g_top_manager);
+  // DCHECK(!g_top_manager);
 #endif
   g_top_manager = this;
 }
 
 AtExitManager::~AtExitManager() {
   if (!g_top_manager) {
-    NOTREACHED() << "Tried to ~AtExitManager without an AtExitManager";
+    // NOTREACHED() << "Tried to ~AtExitManager without an AtExitManager";
     return;
   }
-  DCHECK_EQ(this, g_top_manager);
+  // DCHECK_EQ(this, g_top_manager);
 
   if (!g_disable_managers)
     ProcessCallbacksNow();
@@ -48,26 +48,26 @@ AtExitManager::~AtExitManager() {
 
 // static
 void AtExitManager::RegisterCallback(AtExitCallbackType func, void* param) {
-  DCHECK(func);
+  // DCHECK(func);
   RegisterTask(base::Bind(func, param));
 }
 
 // static
 void AtExitManager::RegisterTask(base::Closure task) {
   if (!g_top_manager) {
-    NOTREACHED() << "Tried to RegisterCallback without an AtExitManager";
+    // NOTREACHED() << "Tried to RegisterCallback without an AtExitManager";
     return;
   }
 
-  AutoLock lock(g_top_manager->lock_);
-  DCHECK(!g_top_manager->processing_callbacks_);
+  // AutoLock lock(g_top_manager->lock_);
+  // DCHECK(!g_top_manager->processing_callbacks_);
   g_top_manager->stack_.push(std::move(task));
 }
 
 // static
 void AtExitManager::ProcessCallbacksNow() {
   if (!g_top_manager) {
-    NOTREACHED() << "Tried to ProcessCallbacksNow without an AtExitManager";
+    // NOTREACHED() << "Tried to ProcessCallbacksNow without an AtExitManager";
     return;
   }
 
@@ -76,7 +76,7 @@ void AtExitManager::ProcessCallbacksNow() {
   // handle it gracefully in release builds so we don't deadlock.
   base::stack<base::Closure> tasks;
   {
-    AutoLock lock(g_top_manager->lock_);
+    // AutoLock lock(g_top_manager->lock_);
     tasks.swap(g_top_manager->stack_);
     g_top_manager->processing_callbacks_ = true;
   }
@@ -92,17 +92,17 @@ void AtExitManager::ProcessCallbacksNow() {
   }
 
   // Expect that all callbacks have been run.
-  DCHECK(g_top_manager->stack_.empty());
+  // DCHECK(g_top_manager->stack_.empty());
 }
 
 void AtExitManager::DisableAllAtExitManagers() {
-  AutoLock lock(g_top_manager->lock_);
+  // AutoLock lock(g_top_manager->lock_);
   g_disable_managers = true;
 }
 
 AtExitManager::AtExitManager(bool shadow)
     : processing_callbacks_(false), next_manager_(g_top_manager) {
-  DCHECK(shadow || !g_top_manager);
+  // DCHECK(shadow || !g_top_manager);
   g_top_manager = this;
 }
 

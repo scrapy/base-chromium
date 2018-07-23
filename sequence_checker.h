@@ -6,7 +6,7 @@
 #define BASE_SEQUENCE_CHECKER_H_
 
 #include "base/compiler_specific.h"
-#include "base/logging.h"
+// #include "base/logging.h"
 #include "base/sequence_checker_impl.h"
 
 // SequenceChecker is a helper class used to help verify that some methods of a
@@ -48,16 +48,16 @@
 //     SEQUENCE_CHECKER(my_sequence_checker_);
 //   }
 
-#if DCHECK_IS_ON()
-#define SEQUENCE_CHECKER(name) base::SequenceChecker name
-#define DCHECK_CALLED_ON_VALID_SEQUENCE(name) \
-  DCHECK((name).CalledOnValidSequence())
-#define DETACH_FROM_SEQUENCE(name) (name).DetachFromSequence()
-#else  // DCHECK_IS_ON()
+// #if DCHECK_IS_ON()
+// #define SEQUENCE_CHECKER(name) base::SequenceChecker name
+// #define DCHECK_CALLED_ON_VALID_SEQUENCE(name) \
+//   DCHECK((name).CalledOnValidSequence())
+// #define DETACH_FROM_SEQUENCE(name) (name).DetachFromSequence()
+// #else  // DCHECK_IS_ON()
 #define SEQUENCE_CHECKER(name)
 #define DCHECK_CALLED_ON_VALID_SEQUENCE(name) EAT_STREAM_PARAMETERS
 #define DETACH_FROM_SEQUENCE(name)
-#endif  // DCHECK_IS_ON()
+// #endif  // DCHECK_IS_ON()
 
 namespace base {
 
@@ -75,13 +75,13 @@ class SequenceCheckerDoNothing {
   DISALLOW_COPY_AND_ASSIGN(SequenceCheckerDoNothing);
 };
 
-#if DCHECK_IS_ON()
-class SequenceChecker : public SequenceCheckerImpl {
-};
-#else
+// #if DCHECK_IS_ON()
+// class SequenceChecker : public SequenceCheckerImpl {
+// };
+// #else
 class SequenceChecker : public SequenceCheckerDoNothing {
 };
-#endif  // DCHECK_IS_ON()
+// #endif  // DCHECK_IS_ON()
 
 }  // namespace base
 
